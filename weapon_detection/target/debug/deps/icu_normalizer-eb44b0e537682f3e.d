@@ -1,0 +1,10 @@
+C:\Users\xande\Documents\COEX\Weapon_detection\weapon_detection\target\debug\deps\icu_normalizer-eb44b0e537682f3e.d: C:\Users\xande\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\icu_normalizer-2.3.0\src\lib.rs C:\Users\xande\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\icu_normalizer-2.3.0\src\properties.rs C:\Users\xande\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\icu_normalizer-2.3.0\src\provider.rs C:\Users\xande\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\icu_normalizer-2.3.0\src\uts46.rs
+
+C:\Users\xande\Documents\COEX\Weapon_detection\weapon_detection\target\debug\deps\libicu_normalizer-eb44b0e537682f3e.rlib: C:\Users\xande\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\icu_normalizer-2.3.0\src\lib.rs C:\Users\xande\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\icu_normalizer-2.3.0\src\properties.rs C:\Users\xande\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\icu_normalizer-2.3.0\src\provider.rs C:\Users\xande\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\icu_normalizer-2.3.0\src\uts46.rs
+
+C:\Users\xande\Documents\COEX\Weapon_detection\weapon_detection\target\debug\deps\libicu_normalizer-eb44b0e537682f3e.rmeta: C:\Users\xande\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\icu_normalizer-2.3.0\src\lib.rs C:\Users\xande\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\icu_normalizer-2.3.0\src\properties.rs C:\Users\xande\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\icu_normalizer-2.3.0\src\provider.rs C:\Users\xande\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\icu_normalizer-2.3.0\src\uts46.rs
+
+C:\Users\xande\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\icu_normalizer-2.3.0\src\lib.rs:
+C:\Users\xande\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\icu_normalizer-2.3.0\src\properties.rs:
+C:\Users\xande\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\icu_normalizer-2.3.0\src\provider.rs:
+C:\Users\xande\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\icu_normalizer-2.3.0\src\uts46.rs:

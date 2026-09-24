@@ -1,0 +1,10 @@
+C:\Users\xande\Documents\COEX\Weapon_detection\weapon_detection\target\debug\deps\egui_winit-7f890ae874d92564.d: C:\Users\xande\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\egui-winit-0.33.3\src\lib.rs C:\Users\xande\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\egui-winit-0.33.3\src\clipboard.rs C:\Users\xande\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\egui-winit-0.33.3\src\safe_area.rs C:\Users\xande\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\egui-winit-0.33.3\src\window_settings.rs
+
+C:\Users\xande\Documents\COEX\Weapon_detection\weapon_detection\target\debug\deps\libegui_winit-7f890ae874d92564.rlib: C:\Users\xande\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\egui-winit-0.33.3\src\lib.rs C:\Users\xande\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\egui-winit-0.33.3\src\clipboard.rs C:\Users\xande\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\egui-winit-0.33.3\src\safe_area.rs C:\Users\xande\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\egui-winit-0.33.3\src\window_settings.rs
+
+C:\Users\xande\Documents\COEX\Weapon_detection\weapon_detection\target\debug\deps\libegui_winit-7f890ae874d92564.rmeta: C:\Users\xande\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\egui-winit-0.33.3\src\lib.rs C:\Users\xande\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\egui-winit-0.33.3\src\clipboard.rs C:\Users\xande\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\egui-winit-0.33.3\src\safe_area.rs C:\Users\xande\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\egui-winit-0.33.3\src\window_settings.rs
+
+C:\Users\xande\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\egui-winit-0.33.3\src\lib.rs:
+C:\Users\xande\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\egui-winit-0.33.3\src\clipboard.rs:
+C:\Users\xande\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\egui-winit-0.33.3\src\safe_area.rs:
+C:\Users\xande\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\egui-winit-0.33.3\src\window_settings.rs:
