@@ -6,3 +6,10 @@ edition = "2024"
 [dependencies]
 eframe = "0.33"
 rfd = "0.15"
+image = "0.25"
+
+windows = { version = "0.62", features = [
+    "Win32_Foundation",
+    "Win32_System_Com",
+    "Win32_Media_MediaFoundation",
+] }
