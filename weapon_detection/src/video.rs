@@ -2,10 +2,7 @@ use std::path::Path;
 
 use windows::core::PCWSTR;
 use windows::Win32::Media::MediaFoundation::*;
-use windows::Win32::System::Com::{
-    CoInitializeEx,
-    COINIT_APARTMENTTHREADED,
-};
+use windows::Win32::System::Com::{CoInitializeEx, COINIT_APARTMENTTHREADED};
 
 pub struct VideoReader {
     reader: IMFSourceReader,
@@ -47,10 +44,7 @@ impl VideoReader {
                 .ok_or("Attributes konden niet worden aangemaakt.")?;
 
             attributes
-                .SetUINT32(
-                    &MF_SOURCE_READER_ENABLE_VIDEO_PROCESSING,
-                    1,
-                )
+                .SetUINT32(&MF_SOURCE_READER_ENABLE_VIDEO_PROCESSING, 1)
                 .map_err(|e| format!("Video processing fout: {e}"))?;
 
             let reader = MFCreateSourceReaderFromURL(
@@ -63,17 +57,11 @@ impl VideoReader {
                 .map_err(|e| format!("Media type fout: {e}"))?;
 
             media_type
-                .SetGUID(
-                    &MF_MT_MAJOR_TYPE,
-                    &MFMediaType_Video,
-                )
+                .SetGUID(&MF_MT_MAJOR_TYPE, &MFMediaType_Video)
                 .map_err(|e| format!("Major type fout: {e}"))?;
 
             media_type
-                .SetGUID(
-                    &MF_MT_SUBTYPE,
-                    &MFVideoFormat_RGB32,
-                )
+                .SetGUID(&MF_MT_SUBTYPE, &MFVideoFormat_RGB32)
                 .map_err(|e| format!("RGB32 fout: {e}"))?;
 
             reader
@@ -110,14 +98,14 @@ impl VideoReader {
                 return Err("Einde van video bereikt.".into());
             }
 
-            let sample = sample
-                .ok_or("Geen videoframe ontvangen.")?;
+            let sample = sample.ok_or("Geen videoframe ontvangen.")?;
 
             let buffer = sample
                 .ConvertToContiguousBuffer()
                 .map_err(|e| format!("Buffer fout: {e}"))?;
 
-            let media_type = self.reader
+            let media_type = self
+                .reader
                 .GetCurrentMediaType(
                     MF_SOURCE_READER_FIRST_VIDEO_STREAM.0 as u32,
                 )
