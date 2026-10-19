@@ -2,6 +2,7 @@ mod video;
 
 use eframe::egui;
 use std::path::PathBuf;
+use std::time::{Duration, Instant};
 use video::VideoReader;
 
 fn main() -> eframe::Result<()> {
@@ -12,7 +13,6 @@ fn main() -> eframe::Result<()> {
     )
 }
 
-#[derive(Default)]
 struct MyApp {
     file: Option<PathBuf>,
 
@@ -21,6 +21,24 @@ struct MyApp {
     video_frame: Option<egui::TextureHandle>,
 
     error: Option<String>,
+
+    playing: bool,
+    last_frame: Instant,
+}
+
+impl Default for MyApp {
+    fn default() -> Self {
+        Self {
+            file: None,
+            image: None,
+            video: None,
+            video_frame: None,
+            error: None,
+
+            playing: false,
+            last_frame: Instant::now(),
+        }
+    }
 }
 
 impl eframe::App for MyApp {
@@ -46,8 +64,10 @@ impl eframe::App for MyApp {
                     .pick_file()
                 {
                     self.file = Some(path.clone());
+
                     self.video = None;
                     self.video_frame = None;
+                    self.playing = false;
                     self.error = None;
 
                     match image::open(&path) {
@@ -75,9 +95,10 @@ impl eframe::App for MyApp {
                         }
 
                         Err(e) => {
+                            self.image = None;
                             self.error =
                                 Some(format!(
-                                    "Afbeelding: {e}"
+                                    "Afbeelding openen mislukt: {e}"
                                 ));
                         }
                     }
@@ -97,8 +118,10 @@ impl eframe::App for MyApp {
                     .pick_file()
                 {
                     self.file = Some(path.clone());
+
                     self.image = None;
                     self.video_frame = None;
+                    self.playing = false;
                     self.error = None;
 
                     match VideoReader::open(&path) {
@@ -117,7 +140,7 @@ impl eframe::App for MyApp {
             ui.separator();
 
             // -------------------------------
-            // Bestand
+            // Geselecteerd bestand
             // -------------------------------
 
             if let Some(path) = &self.file {
@@ -128,7 +151,7 @@ impl eframe::App for MyApp {
             }
 
             // -------------------------------
-            // Afbeelding tonen
+            // Afbeelding
             // -------------------------------
 
             if let Some(texture) = &self.image {
@@ -143,18 +166,87 @@ impl eframe::App for MyApp {
             }
 
             // -------------------------------
-            // Eerste videoframe
+            // Video
             // -------------------------------
 
-            if let Some(video) = &self.video {
+            if self.video.is_some() {
                 ui.separator();
                 ui.label("Video geopend.");
 
                 if ui.button("Eerste frame uitlezen").clicked() {
+                    if let Some(video) = &self.video {
+                        match video.read_frame() {
+                            Ok(frame) => {
+                                let mut pixels =
+                                    Vec::with_capacity(
+                                        frame.width
+                                            * frame.height
+                                            * 4,
+                                    );
+
+                                for p in frame.data.chunks_exact(4) {
+                                    pixels.extend([
+                                        p[2], // R
+                                        p[1], // G
+                                        p[0], // B
+                                        255,  // A
+                                    ]);
+                                }
+
+                                let color =
+                                    egui::ColorImage::from_rgba_unmultiplied(
+                                        [frame.width, frame.height],
+                                        &pixels,
+                                    );
+
+                                self.video_frame = Some(
+                                    ctx.load_texture(
+                                        "video_frame",
+                                        color,
+                                        Default::default(),
+                                    ),
+                                );
+
+                                self.error = None;
+                            }
+
+                            Err(e) => {
+                                self.error = Some(e);
+                            }
+                        }
+                    }
+                }
+
+                ui.horizontal(|ui| {
+                    if ui.button("▶ Video afspelen").clicked() {
+                        self.playing = true;
+                        self.last_frame = Instant::now();
+                        self.error = None;
+                    }
+
+                    if ui.button("⏸ Pauzeren").clicked() {
+                        self.playing = false;
+                    }
+                });
+            }
+
+            // -------------------------------
+            // Video afspelen
+            // -------------------------------
+
+            if self.playing
+                && self.last_frame.elapsed()
+                    >= Duration::from_millis(33)
+            {
+                if let Some(video) = &self.video {
                     match video.read_frame() {
                         Ok(frame) => {
                             let mut pixels =
-                                Vec::with_capacity(frame.width * frame.height * 4);
+                                Vec::with_capacity(
+                                    frame.width
+                                        * frame.height
+                                        * 4,
+                                );
 
                             for p in frame.data.chunks_exact(4) {
                                 pixels.extend([
@@ -171,19 +263,28 @@ impl eframe::App for MyApp {
                                     &pixels,
                                 );
 
-                            self.video_frame = Some(
-                                ctx.load_texture(
-                                    "video_frame",
+                            if let Some(texture) =
+                                &mut self.video_frame
+                            {
+                                texture.set(
                                     color,
                                     Default::default(),
-                                ),
-                            );
+                                );
+                            } else {
+                                self.video_frame = Some(
+                                    ctx.load_texture(
+                                        "video_frame",
+                                        color,
+                                        Default::default(),
+                                    ),
+                                );
+                            }
 
-                            self.error = None;
+                            self.last_frame = Instant::now();
                         }
 
-                        Err(e) => {
-                            self.error = Some(e);
+                        Err(_) => {
+                            self.playing = false;
                         }
                     }
                 }
@@ -195,7 +296,7 @@ impl eframe::App for MyApp {
 
             if let Some(texture) = &self.video_frame {
                 ui.separator();
-                ui.label("Eerste videoframe:");
+                ui.label("Videoframe:");
 
                 ui.add(
                     egui::Image::new(texture)
@@ -217,5 +318,13 @@ impl eframe::App for MyApp {
                 );
             }
         });
+
+        // Zorg dat de GUI tijdens het afspelen
+        // regelmatig opnieuw wordt getekend.
+        if self.playing {
+            ctx.request_repaint_after(
+                Duration::from_millis(10),
+            );
+        }
     }
 }
