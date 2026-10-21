@@ -1,8 +1,8 @@
 use std::path::Path;
 
-use windows::core::PCWSTR;
 use windows::Win32::Media::MediaFoundation::*;
-use windows::Win32::System::Com::{CoInitializeEx, COINIT_APARTMENTTHREADED};
+use windows::Win32::System::Com::{COINIT_APARTMENTTHREADED, CoInitializeEx};
+use windows::core::PCWSTR;
 
 pub struct VideoReader {
     reader: IMFSourceReader,
@@ -26,35 +26,24 @@ impl VideoReader {
             MFStartup(MF_VERSION, MFSTARTUP_FULL)
                 .map_err(|e| format!("Media Foundation fout: {e}"))?;
 
-            let path = path
-                .to_str()
-                .ok_or("Ongeldig bestandspad.")?;
+            let path = path.to_str().ok_or("Ongeldig bestandspad.")?;
 
-            let wide: Vec<u16> = path
-                .encode_utf16()
-                .chain(std::iter::once(0))
-                .collect();
+            let wide: Vec<u16> = path.encode_utf16().chain(std::iter::once(0)).collect();
 
             let mut attributes = None;
 
-            MFCreateAttributes(&mut attributes, 1)
-                .map_err(|e| format!("Attributes fout: {e}"))?;
+            MFCreateAttributes(&mut attributes, 1).map_err(|e| format!("Attributes fout: {e}"))?;
 
-            let attributes = attributes
-                .ok_or("Attributes konden niet worden aangemaakt.")?;
+            let attributes = attributes.ok_or("Attributes konden niet worden aangemaakt.")?;
 
             attributes
                 .SetUINT32(&MF_SOURCE_READER_ENABLE_VIDEO_PROCESSING, 1)
                 .map_err(|e| format!("Video processing fout: {e}"))?;
 
-            let reader = MFCreateSourceReaderFromURL(
-                PCWSTR(wide.as_ptr()),
-                Some(&attributes),
-            )
-            .map_err(|e| format!("Video openen mislukt: {e}"))?;
+            let reader = MFCreateSourceReaderFromURL(PCWSTR(wide.as_ptr()), Some(&attributes))
+                .map_err(|e| format!("Video openen mislukt: {e}"))?;
 
-            let media_type = MFCreateMediaType()
-                .map_err(|e| format!("Media type fout: {e}"))?;
+            let media_type = MFCreateMediaType().map_err(|e| format!("Media type fout: {e}"))?;
 
             media_type
                 .SetGUID(&MF_MT_MAJOR_TYPE, &MFMediaType_Video)
@@ -106,9 +95,7 @@ impl VideoReader {
 
             let media_type = self
                 .reader
-                .GetCurrentMediaType(
-                    MF_SOURCE_READER_FIRST_VIDEO_STREAM.0 as u32,
-                )
+                .GetCurrentMediaType(MF_SOURCE_READER_FIRST_VIDEO_STREAM.0 as u32)
                 .map_err(|e| format!("Media type ophalen fout: {e}"))?;
 
             let size = media_type
@@ -123,21 +110,13 @@ impl VideoReader {
             let mut current_length = 0u32;
 
             buffer
-                .Lock(
-                    &mut ptr,
-                    Some(&mut max_length),
-                    Some(&mut current_length),
-                )
+                .Lock(&mut ptr, Some(&mut max_length), Some(&mut current_length))
                 .map_err(|e| format!("Buffer lock fout: {e}"))?;
 
             let mut data = vec![0u8; current_length as usize];
 
             if !ptr.is_null() && current_length > 0 {
-                std::ptr::copy_nonoverlapping(
-                    ptr,
-                    data.as_mut_ptr(),
-                    current_length as usize,
-                );
+                std::ptr::copy_nonoverlapping(ptr, data.as_mut_ptr(), current_length as usize);
             }
 
             buffer
