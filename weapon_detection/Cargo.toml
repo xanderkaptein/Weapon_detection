@@ -2,11 +2,15 @@
 name = "weapon_detection"
 version = "0.1.0"
 edition = "2024"
+default-run = "weapon_detection"
 
 [dependencies]
 eframe = "0.33"
 rfd = "0.15"
 image = "0.25"
+ort = "2.0.0-rc.15"
+imageproc = "0.25"
+ab_glyph = "0.2"
 
 windows = { version = "0.62", features = [
     "Win32_Foundation",
